@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
+
 public class AlarmSignal : MonoBehaviour
 {
     [SerializeField] private float _startVolume;
@@ -9,33 +11,34 @@ public class AlarmSignal : MonoBehaviour
 
     private AudioSource _alarmSignal;
 
+    public void Play()
+    {
+        _alarmSignal.volume = 0.0f;
+
+        StartCoroutine(IncreaseVolume());
+
+        _alarmSignal.Play();
+    }
+
+    public void Stop()
+    {
+        StopCoroutine(IncreaseVolume());
+
+        _alarmSignal.Stop();
+    }
+
     private void Start()
     {
         _alarmSignal= GetComponent<AudioSource>();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private IEnumerator IncreaseVolume() 
     {
-        if (collision.TryGetComponent<Movement>(out Movement movement))
+        while (_alarmSignal.volume < 1)
         {
-            _alarmSignal.volume = _startVolume;
-            _alarmSignal.Play();
-        }
-    }
+            _alarmSignal.volume += Time.deltaTime / _volumeIncreaseDuration;
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.TryGetComponent<Movement>(out Movement movement))
-        {
-            _alarmSignal.Stop();
-        }
-    }
-
-    private void Update()
-    {
-        if (_alarmSignal.isPlaying) 
-        {
-            _alarmSignal.volume += (Time.deltaTime / _volumeIncreaseDuration);
+            yield return null;
         }
     }
 }

@@ -1,6 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using UnityEditor;
 using UnityEngine;
+
+[RequireComponent(typeof(Animator))]
 
 public class Movement : MonoBehaviour
 {
@@ -19,7 +23,7 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
-        _animator.SetFloat("speed", _speed);
+        _animator.SetFloat(SpaceMan.Params.SpeedHash, _speed);
 
         if (_isEscape == false)
         {
@@ -38,4 +42,12 @@ public class Movement : MonoBehaviour
             transform.position = Vector3.MoveTowards(transform.position, _escapePosition.position, _speed * Time.deltaTime);
         }
     }
+}
+
+public static class SpaceMan 
+{ 
+    public static class Params 
+    { 
+        public static int SpeedHash = Animator.StringToHash("speed"); 
+    } 
 }
