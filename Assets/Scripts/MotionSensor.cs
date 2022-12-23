@@ -2,15 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(AlarmSignal))]
+[RequireComponent(typeof(Alarm))]
 
 public class MotionSensor : MonoBehaviour
 {
-    private AlarmSignal _alarmSignal; 
+    private Alarm _alarmSignal; 
 
     private void Start()
     {
-        _alarmSignal = GetComponent<AlarmSignal>();
+        _alarmSignal = GetComponent<Alarm>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
