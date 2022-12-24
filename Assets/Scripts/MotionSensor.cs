@@ -17,7 +17,7 @@ public class MotionSensor : MonoBehaviour
     {
         if (collision.TryGetComponent<Movement>(out Movement movement))
         {
-            _alarmSignal.Play();
+            _alarmSignal.IncreaseVolume();
         }
     }
 
@@ -25,7 +25,7 @@ public class MotionSensor : MonoBehaviour
     {
         if (collision.TryGetComponent<Movement>(out Movement movement))
         {
-            _alarmSignal.Stop();
+            _alarmSignal.DecreaseVolume();
         }
     }
 }

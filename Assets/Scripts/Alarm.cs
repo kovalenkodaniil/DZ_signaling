@@ -10,37 +10,40 @@ public class Alarm : MonoBehaviour
     [SerializeField] private float _volumeIncreaseDuration;
 
     private AudioSource _alarmSignal;
-    private float _maxVolume;
+    private float _stopPoint;
+    private int _volumeModify;
 
     private void Start()
     {
-        _maxVolume = 1;
         _alarmSignal = GetComponent<AudioSource>();
     }
 
-    private IEnumerator IncreaseVolume() 
+    private IEnumerator ChangeVolume() 
     {
-        while (_alarmSignal.volume < _maxVolume)
+        while (_alarmSignal.volume != _stopPoint)
         {
-            _alarmSignal.volume += Time.deltaTime / _volumeIncreaseDuration;
+            _alarmSignal.volume += Time.deltaTime * _volumeModify / _volumeIncreaseDuration;
 
             yield return null;
         }
     }
 
-    public void Play()
+    public void IncreaseVolume()
     {
         _alarmSignal.volume = 0.0f;
+        _stopPoint = 1;
+        _volumeModify = 1;
 
-        StartCoroutine(IncreaseVolume());
+        StartCoroutine(ChangeVolume());
 
         _alarmSignal.Play();
     }
 
-    public void Stop()
+    public void DecreaseVolume()
     {
-        StopCoroutine(IncreaseVolume());
+        _stopPoint = 0;
+        _volumeModify = -1;
 
-        _alarmSignal.Stop();
+        StartCoroutine(ChangeVolume());
     }
 }
